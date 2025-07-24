@@ -1,0 +1,32 @@
+version: 2
+updates:
+  # Cargo dependencies
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    groups:
+      # Group serde packages together
+      serde:
+        patterns:
+          - "serde*"
+      # Group tokio packages together
+      tokio:
+        patterns:
+          - "tokio*"
+      # Group clap packages together
+      clap:
+        patterns:
+          - "clap*"
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5

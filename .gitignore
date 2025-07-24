@@ -1,2 +1,6 @@
 /target
 .env
+.claude
+.DS_Store
+.idea
+.vscode
