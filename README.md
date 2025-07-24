@@ -2,7 +2,14 @@
 
 A command-line tool for interacting with OpenAI's Chat Completions API, built with Rust for performance and safety.
 
-**This is a phased approach for porting DSPy functionality to DSRS.  This is still very much in active development and it's not expected to cover DSPy use cases.**
+**This is a phased approach for porting DSPy functionality to DSRS.  This is still very much in active development and it's not expected to cover DSPy use cases today.**
+
+- [ ] Phase 1: Refresher on Rust by making super basic LLM client w/ github action ci.
+- [ ] Phase 2: DS signatures and basic prediction
+- [ ] Phase 3: DS modules and composition
+- [ ] Phase 4: DS metrics and evaulation
+- [ ] Phase 5: DS basic opitimization
+- [ ] Phase 6: DS advanced optimization
 
 ## Features
 
