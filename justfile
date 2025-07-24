@@ -105,6 +105,20 @@ audit:
     @echo "🔒 Running security audit..."
     cargo audit
 
+# Generate code coverage report
+coverage:
+    @echo "📊 Generating code coverage..."
+    cargo tarpaulin --verbose --all-features --workspace --timeout 120 --out html
+    @echo "📊 Coverage report generated in tarpaulin-report.html"
+
+# Run Miri for undefined behavior detection (requires nightly)
+# Note: May fail on macOS with async/networking code due to unsupported syscalls
+miri:
+    @echo "🔍 Running Miri undefined behavior detection..."
+    @echo "ℹ️  Note: Miri may fail with async/networking code on macOS"
+    -cargo +nightly miri test
+    @echo "ℹ️  Miri works best in CI on Linux for this project"
+
 # Check for outdated dependencies
 outdated:
     @echo "📦 Checking for outdated dependencies..."
@@ -167,4 +181,7 @@ check-env:
 setup: check-env
     @echo "🔧 Setting up development environment..."
     rustup component add clippy rustfmt
+    rustup toolchain install nightly
+    rustup +nightly component add miri
+    cargo install cargo-audit cargo-tarpaulin cargo-outdated cargo-watch
     @echo "✅ Development environment ready!"
