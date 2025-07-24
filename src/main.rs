@@ -57,11 +57,11 @@ impl std::fmt::Display for DSRSError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
             DSRSError::PromptTooLong(len, max) => {
-                write!(f, "Prompt too long: {} chars (max: {})", len, max)
+                write!(f, "Prompt too long: {len} chars (max: {max})")
             }
-            DSRSError::ApiError(msg) => write!(f, "API error: {}", msg),
-            DSRSError::NetworkError(msg) => write!(f, "Network error: {}", msg),
-            DSRSError::ConfigError(msg) => write!(f, "Configuration error: {}", msg),
+            DSRSError::ApiError(msg) => write!(f, "API error: {msg}"),
+            DSRSError::NetworkError(msg) => write!(f, "Network error: {msg}"),
+            DSRSError::ConfigError(msg) => write!(f, "Configuration error: {msg}"),
         }
     }
 }
@@ -140,7 +140,7 @@ impl OpenAIClient {
         // Load API key when needed (not stored in struct for security)
         dotenv().ok(); // Load .env file if it exists (fails silently if no file)
         let api_key = std::env::var("OPENAI_API_KEY")
-            .map_err(|err| DSRSError::ConfigError(format!("OPENAI_API_KEY not set: {}", err)))?;
+            .map_err(|err| DSRSError::ConfigError(format!("OPENAI_API_KEY not set: {err}")))?;
 
         // Validate prompt length to prevent expensive API calls
         // OpenAI charges by token, roughly 4 chars = 1 token
@@ -163,12 +163,12 @@ impl OpenAIClient {
         let response = self
             .client
             .post(&endpoint)
-            .header("Authorization", format!("Bearer {}", api_key))
+            .header("Authorization", format!("Bearer {api_key}"))
             .header("Content-Type", "application/json")
             .json(&request)
             .send()
             .await
-            .map_err(|err| DSRSError::NetworkError(format!("Request failed: {}", err)))?;
+            .map_err(|err| DSRSError::NetworkError(format!("Request failed: {err}")))?;
 
         // Check HTTP status before attempting to parse JSON
         // API can return 200 with error details in JSON, but 4xx/5xx are clear failures
@@ -179,7 +179,7 @@ impl OpenAIClient {
         let chat_response: ChatResponse = response
             .json()
             .await
-            .map_err(|err| DSRSError::ApiError(format!("Failed to parse response: {}", err)))?;
+            .map_err(|err| DSRSError::ApiError(format!("Failed to parse response: {err}")))?;
 
         // OpenAI API should always return at least one choice, but validate to prevent panic
         if chat_response.choices.is_empty() {
@@ -200,7 +200,7 @@ async fn main() -> Result<(), DSRSError> {
     let response = client
         .complete(&args.prompt, &args.model, Some(args.max_tokens))
         .await?;
-    println!("Response: {}", response);
+    println!("Response: {response}");
     Ok(())
 }
 
