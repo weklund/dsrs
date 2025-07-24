@@ -1,0 +1,19 @@
+# Clippy configuration for project-specific lint settings
+# This file configures lints that can't be set in Cargo.toml
+
+# Don't warn about "complex" types - we use Result<String, DSRSError> which is reasonable
+type-complexity-threshold = 60
+
+# Allow some common names that might trigger similar_names lint
+allowed-scripts = ["Latin"]
+
+# Set reasonable limits for our CLI tool
+too-many-arguments-threshold = 7
+too-many-lines-threshold = 150
+pass-by-value-size-limit = 256
+
+# Documentation settings
+doc-valid-idents = ["OpenAI", "API", "CLI", "DSPy", "DSRS", "JSON", "HTTP", "HTTPS"]
+
+# Avoid breaking changes for this public API
+avoid-breaking-exported-api = true

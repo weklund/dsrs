@@ -1,0 +1,31 @@
+[package]
+name = "dsrs"
+version = "0.1.0"
+edition = "2024"
+
+# Linting configuration for code quality
+[lints.rust]
+unsafe_code = "deny"             # Security: no unsafe code allowed (deny allows test overrides)
+unused_extern_crates = "warn"    # Clean imports
+unused_qualifications = "warn"   # Avoid unnecessary module prefixes
+
+[lints.clippy]
+# Essential categories for production code (with priority to override specific lints)
+all = "warn"                                          # Enable comprehensive linting
+correctness = { level = "deny", priority = -1 }      # Code correctness issues are errors
+suspicious = { level = "deny", priority = -1 }       # Sus code patterns are errors  
+perf = { level = "warn", priority = -1 }              # Performance improvements
+complexity = { level = "warn", priority = -1 }       # Suggest code simplifications
+
+# Specific high-value lints (these can override the groups above)
+unwrap_used = "warn"                                  # Suggest better error handling
+expect_used = "warn"                                  # Suggest better error handling
+panic = "warn"                                        # Avoid panics in production code
+todo = "warn"                                         # Don't ship TODOs
+
+[dependencies]
+dotenvy = "0.15.7"
+clap = { version = "4.5.41", features = ["derive"] }
+reqwest = { version = "0.12.22", features = ["json"] }
+serde = { version = "1.0.219", features = ["derive"] }
+tokio = { version = "1.46.1", features = ["full"] }
