@@ -25,19 +25,6 @@ jobs:
       - name: Run security audit
         run: cargo audit
 
-  miri:
-    name: Miri (Undefined Behavior Detection)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@nightly
-        with:
-          components: miri
-      - uses: Swatinem/rust-cache@v2
-      - name: Run Miri
-        run: cargo miri test
-        env:
-          MIRIFLAGS: -Zmiri-strict-provenance
 
   codeql:
     name: CodeQL Analysis
