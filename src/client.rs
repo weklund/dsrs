@@ -2,7 +2,7 @@ use crate::errors::DSRSError;
 use dotenvy::dotenv;
 use reqwest::{Client, ClientBuilder};
 use serde::{Deserialize, Serialize};
-use std::time::Duration; // Import from errors module
+use std::time::Duration;
 
 const DEFAULT_LLM_ENDPOINT: &str = "https://api.openai.com/v1/chat/completions";
 #[allow(dead_code)]
@@ -92,10 +92,7 @@ impl LLMClient {
     ) -> Result<String, DSRSError> {
         dotenv().ok();
         let api_key = std::env::var("LLM_API_KEY")
-            .or_else(|_| std::env::var("OPENAI_API_KEY"))
-            .map_err(|err| {
-                DSRSError::ConfigError(format!("LLM_API_KEY or OPENAI_API_KEY not set: {err}"))
-            })?;
+            .map_err(|err| DSRSError::ConfigError(format!("LLM_API_KEY not set: {err}")))?;
 
         if prompt.len() > MAX_PROMPT_LENGTH {
             return Err(DSRSError::PromptTooLong(prompt.len(), MAX_PROMPT_LENGTH));
@@ -110,9 +107,8 @@ impl LLMClient {
             temperature,
         };
 
-        let endpoint = std::env::var("LLM_ENDPOINT")
-            .or_else(|_| std::env::var("OPENAI_API_ENDPOINT"))
-            .unwrap_or_else(|_| DEFAULT_LLM_ENDPOINT.to_string());
+        let endpoint =
+            std::env::var("LLM_ENDPOINT").unwrap_or_else(|_| DEFAULT_LLM_ENDPOINT.to_string());
 
         let response = self
             .client
@@ -133,7 +129,7 @@ impl LLMClient {
             .await
             .map_err(|err| DSRSError::ApiError(format!("Failed to parse response: {err}")))?;
 
-        // New: Check for embedded error in JSON
+        // Check for embedded error in JSON
         if let Some(err) = chat_response.error {
             return Err(DSRSError::ApiError(format!(
                 "{} (type: {}, code: {:?})",

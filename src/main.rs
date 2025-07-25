@@ -50,18 +50,32 @@ mod tests {
     use super::*;
 
     #[tokio::test]
+    #[allow(unsafe_code)]
     async fn test_complete_with_long_prompt() {
+        // Set a dummy API key for testing so we get to the prompt length check
+        unsafe {
+            std::env::set_var("LLM_API_KEY", "test-key-for-prompt-length-validation");
+        }
+
         let client = LLMClient::new();
         let long_prompt = "a".repeat(35000); // Exceeds 32k limit
         let result = client
             .complete(&long_prompt, "gpt-3.5-turbo", Some(100), None)
             .await;
 
-        if let Err(DSRSError::PromptTooLong(len, max)) = result {
-            assert_eq!(len, 35000);
-            assert_eq!(max, 32000);
-        } else {
-            panic!("Expected PromptTooLong error");
+        match result {
+            Err(DSRSError::PromptTooLong(len, max)) => {
+                assert_eq!(len, 35000);
+                assert_eq!(max, 32000);
+            }
+            other => {
+                panic!("Expected PromptTooLong error, got: {:?}", other);
+            }
+        }
+
+        // Clean up
+        unsafe {
+            std::env::remove_var("LLM_API_KEY");
         }
     }
 
