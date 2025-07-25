@@ -90,16 +90,6 @@ example-help:
     @echo "💬 Showing CLI help..."
     cargo run -- --help
 
-# == CI/CD Commands ==
-
-# Full CI pipeline (what runs in continuous integration)
-ci: format-check lint test build
-    @echo "🚀 CI pipeline completed successfully!"
-
-# Pre-commit hook simulation
-pre-commit: format lint test
-    @echo "✅ Pre-commit checks passed!"
-
 # Security audit
 audit:
     @echo "🔒 Running security audit..."

@@ -1,10 +1,10 @@
 # DSRS - DSPy-like Rust CLI
 
-A command-line tool for interacting with OpenAI's Chat Completions API, built with Rust for performance and safety.
+A command-line tool for interacting with LLM providers via OpenAI-compatible APIs, built with Rust for performance and safety.
 
 **This is a phased approach for porting DSPy functionality to DSRS.  This is still very much in active development and it's not expected to cover DSPy use cases today.**
 
-- [ ] Phase 1: Refresher on Rust by making super basic LLM client w/ github action ci.
+- [x] Phase 1: Refresher on Rust by making super basic LLM client w/ github action ci.
 - [ ] Phase 2: DS signatures and basic prediction
 - [ ] Phase 3: DS modules and composition
 - [ ] Phase 4: DS metrics and evaulation
@@ -22,7 +22,7 @@ A command-line tool for interacting with OpenAI's Chat Completions API, built wi
 ### Prerequisites
 
 - Rust 1.74+ (install via [rustup](https://rustup.rs/))
-- OpenAI API key
+- API key from your preferred LLM provider
 
 ### Installation
 
@@ -33,16 +33,35 @@ cd dsrs
 
 ### Setup API Key
 
-Set your OpenAI API key as an environment variable:
+Set your LLM provider API key as an environment variable:
 
 ```bash
-export OPENAI_API_KEY='sk-your-key-here'
+export LLM_API_KEY='your-api-key-here'
 ```
 
 Or create a `.env` file:
 
 ```bash
-echo "OPENAI_API_KEY=sk-your-key-here" > .env
+echo "LLM_API_KEY=your-api-key-here" > .env
+```
+
+**For different providers:**
+```bash
+# OpenAI (default)
+LLM_API_KEY=sk-your-openai-key
+LLM_ENDPOINT=https://api.openai.com/v1/chat/completions
+
+# Together AI
+LLM_API_KEY=your-together-key
+LLM_ENDPOINT=https://api.together.xyz/v1/chat/completions
+
+# OpenRouter
+LLM_API_KEY=sk-or-your-openrouter-key
+LLM_ENDPOINT=https://openrouter.ai/api/v1/chat/completions
+
+# Local model (e.g., LM Studio)
+LLM_API_KEY=not-needed
+LLM_ENDPOINT=http://localhost:1234/v1/chat/completions
 ```
 
 ### Development Setup
@@ -144,15 +163,31 @@ The project uses strict linting rules to ensure code quality:
 
 ### Environment Variables
 
-- `OPENAI_API_KEY` - Your OpenAI API key (required)
-- `OPENAI_API_ENDPOINT` - Custom API endpoint (optional, defaults to OpenAI)
+**Primary (recommended):**
+- `LLM_API_KEY` - Your LLM provider API key (required)
+- `LLM_ENDPOINT` - API endpoint URL (optional, defaults to OpenAI)
 
-### Supported Models
 
+### Supported Providers & Models
+
+**OpenAI:**
 - `gpt-3.5-turbo` (default)
-- `gpt-4`
-- `gpt-4-turbo`
-- Any OpenAI Chat Completions compatible model
+- `gpt-4`, `gpt-4-turbo`, `gpt-4o`
+
+**Together AI:**
+- `meta-llama/Llama-2-70b-chat-hf`
+- `mistralai/Mixtral-8x7B-Instruct-v0.1`
+- `NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO`
+
+**OpenRouter:**
+- `anthropic/claude-3-sonnet`
+- `google/gemini-pro`
+- Any model available on OpenRouter
+
+**Local Models:**
+- Any model running locally (e.g., via LM Studio, Ollama with OpenAI compatibility)
+
+*Any provider that supports the OpenAI Chat Completions API format*
 
 ## Security
 
