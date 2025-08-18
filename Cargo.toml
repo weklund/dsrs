@@ -26,6 +26,6 @@ todo = "warn"                                         # Don't ship TODOs
 [dependencies]
 dotenvy = "0.15.7"
 clap = { version = "4.5.41", features = ["derive"] }
-reqwest = { version = "0.12.22", features = ["json"] }
+reqwest = { version = "0.12.23", features = ["json"] }
 serde = { version = "1.0.219", features = ["derive"] }
 tokio = { version = "1.46.1", features = ["full"] }
