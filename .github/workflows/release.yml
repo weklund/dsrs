@@ -44,7 +44,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: copy target\${{ matrix.target }}\release\dsrs${{ matrix.suffix }} artifacts\dsrs-${{ matrix.target }}${{ matrix.suffix }}
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dsrs-${{ matrix.target }}
           path: artifacts/
